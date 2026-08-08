@@ -1,4 +1,4 @@
-import { CronJob } from "cron";
+import job from "./lib/cron.js";
 import http from "node:http";
 import https from "node:https";
 
