@@ -23,6 +23,8 @@ const PORT=process.env.PORT;
 const FRONTEND_URL=process.env.FRONTEND_URL
 const publicDir =path.join(process.cwd(),"public");
 
+app.use=("api/webhooks/clerk",express.raw({type :"application/json"}),clerkWebhook);
+
 app.use(express.json())  //it is also on eof the middleware ...it used for parse the data and json data
 app.use(cors({origin:FRONTEND_URL,credentials:true}));     // browser security rule
 
