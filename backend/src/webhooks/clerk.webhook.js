@@ -1,10 +1,8 @@
 import express from "express";
-import User from "./models/user.model.js";
-import {verifyWebhook} from "@clerk/backend/webhooks";
-import clerkWebhook from "./webhooks/clerk.webhook.js";
+import User from "../models/user.model.js";
+import { verifyWebhook } from "@clerk/backend/webhooks";
 
-
-const router=express.Router();
+const router = express.Router();
 
 router.post("/", async (req, res) => {
   try {
@@ -53,5 +51,4 @@ router.post("/", async (req, res) => {
   }
 });
 
-
-export default router
+export default router;
