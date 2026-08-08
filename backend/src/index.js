@@ -45,5 +45,7 @@ app.get("/{*any}",(req,res,next)=>{
 app.listen(PORT,()=>{
     connectDB();
     console.log("server is up and running on PORT",PORT);
+
+    if (process.env.NODE_ENV === "production") job.start();
 }
 );
