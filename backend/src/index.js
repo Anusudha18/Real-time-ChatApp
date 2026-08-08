@@ -12,7 +12,6 @@ import job from "./lib/cron.js";
 import User from "./models/user.model.js";
 import { connectDB } from "./lib/db.js";
 import { clerkMiddleware } from '@clerk/express';
-import clerkWebhookRouter from "./routes/clerkWebhook.route.js"; // <-- adjust path to your actual webhook router file
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -20,7 +19,7 @@ const FRONTEND_URL = process.env.FRONTEND_URL;
 const publicDir = path.join(process.cwd(), "public");
 
 // webhook route MUST come before express.json(), and needs raw body
-app.use("/api/webhooks/clerk", express.raw({ type: "application/json" }), clerkWebhookRouter);
+app.use("/api/webhooks/clerk", express.raw({ type: "application/json" }), clerkWebhook);
 
 app.use(express.json());
 app.use(cors({ origin: FRONTEND_URL, credentials: true }));
