@@ -9,6 +9,7 @@ import fs from "fs";
 import path from "path";
 import job from "./lib/cron.js";
 import clerkWebhook from "./webhooks/clerk.webhook.js";
+import authRoutes from "./routes/auth.route.js";
 
 import User from "./models/user.model.js";
 import { connectDB } from "./lib/db.js";
@@ -29,6 +30,8 @@ app.use(clerkMiddleware());
 app.get("/health", (req, res) => {
   res.status(200).json({ ok: true });
 });
+
+app.use("/api/auth",authRoutes);
 
 if (fs.existsSync(publicDir)) {
   app.use(express.static(publicDir));
