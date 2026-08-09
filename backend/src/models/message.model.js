@@ -25,4 +25,6 @@ const messageSchema = new mangoose.Schema(
 
 const Message = mangoose.model("Message",messageSchema) //model 
 
+
+
 export default Message  //exporting model
