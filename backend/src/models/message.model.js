@@ -1,30 +1,30 @@
-import mangoose from "mangoose"  //mangosse import
+import mongoose from "mongoose";
 
-const messageSchema = new mangoose.Schema(
-    {
-    senderId :{
-        type : mangoose.Schema.Types.ObjectId ,
-        ref :"User",
-        require:true,
+const messageSchema = new mongoose.Schema(
+  {
+    senderId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
-    recieverId :{
-        type : mangoose.Schema.Types.ObjectId ,
-        ref :"User",
-        require:true,
+    receiverId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
-    text:{
-        type:String,
+    text: {
+      type: String,
     },
-    image:{
-        type:String,
+    image: {
+      type: String,
     },
-    video:{
-        type:String,
+    video: {
+      type: String,
     },
-},{timestamps:true})                 //mangoose schema
+  },
+  { timestamps: true },
+);
 
-const Message = mangoose.model("Message",messageSchema) //model 
+const Message = mongoose.model("Message", messageSchema);
 
-
-
-export default Message  //exporting model
+export default Message;
