@@ -1,32 +1,22 @@
-import { isImageKitUrl, withTransform } from "../../lib/imagekit";
+import { MessageCircleIcon } from "lucide-react";
 
-// Chat videos are stored on ImageKit, so we let ImageKit optimize delivery
-// on the fly via URL transformations (compressed + sized for the bubble).
-// Note: q-auto isn't enabled for video on this account (returns 400), so use a fixed quality.
-// https://imagekit.io/docs/video-transformation
-const VIDEO_TRANSFORM = "q-80,w-640";
-const POSTER_TRANSFORM = "q-80,w-640";
-
-/** ImageKit can extract a poster frame by appending `/ik-thumbnail.jpg`. */
-function buildPosterUrl(url) {
-  if (!isImageKitUrl(url)) return undefined;
-  const [path] = url.split("?");
-  return withTransform(`${path}/ik-thumbnail.jpg`, POSTER_TRANSFORM);
-}
-
-/** ImageKit-optimized chat video with an auto-generated poster frame. */
-export function MessageVideo({ src }) {
-  const optimizedSrc = withTransform(src, VIDEO_TRANSFORM);
-  const posterSrc = buildPosterUrl(src);
-
+export function NoConversationPlaceholder() {
   return (
-    <video
-      src={optimizedSrc}
-      poster={posterSrc}
-      controls
-      playsInline
-      preload="metadata"
-      className="mb-1.5 max-h-52 max-w-full rounded-lg object-contain sm:max-h-64 sm:rounded-xl"
-    />
+    <div className="flex min-h-48 flex-1 flex-col items-center justify-center gap-4 px-4 py-12 text-center sm:gap-5 sm:px-8 sm:py-16">
+      <div
+        className="flex size-22 items-center justify-center rounded-3xl bg-accent-soft"
+        aria-hidden
+      >
+        <MessageCircleIcon className="size-10 text-accent" strokeWidth={1.25} />
+      </div>
+      <div className="max-w-76 space-y-2">
+        <h2 className="text-[16px] font-semibold tracking-tight sm:text-[17px]">
+          Select a chat to start
+        </h2>
+        <p className="text-[13px] leading-relaxed text-muted">
+          Pick a conversation from the list on the left to read messages and reply.
+        </p>
+      </div>
+    </div>
   );
 }

@@ -1,31 +1,32 @@
-import useScrollToBottom from "../../hooks/useScrollToBottom";
-import { MessageBubble } from "./MessageBubble";
-import { NoConversationPlaceholder } from "./NoConversationPlaceholder";
-import { useSelectedConversation } from "../../hooks/useSelectedConversation";
+import { isImageKitUrl, withTransform } from "../../lib/imagekit";
 
-export function MessageList() {
-  const { activeConversation, activeConversationId } = useSelectedConversation();
+// Chat videos are stored on ImageKit, so we let ImageKit optimize delivery
+// on the fly via URL transformations (compressed + sized for the bubble).
+// Note: q-auto isn't enabled for video on this account (returns 400), so use a fixed quality.
+// https://imagekit.io/docs/video-transformation
+const VIDEO_TRANSFORM = "q-80,w-640";
+const POSTER_TRANSFORM = "q-80,w-640";
 
-  const lastMessageId = activeConversation?.messages.at(-1)?.id;
-  const messagesScrollRef = useScrollToBottom(activeConversationId, lastMessageId);
+/** ImageKit can extract a poster frame by appending `/ik-thumbnail.jpg`. */
+function buildPosterUrl(url) {
+  if (!isImageKitUrl(url)) return undefined;
+  const [path] = url.split("?");
+  return withTransform(`${path}/ik-thumbnail.jpg`, POSTER_TRANSFORM);
+}
+
+/** ImageKit-optimized chat video with an auto-generated poster frame. */
+export function MessageVideo({ src }) {
+  const optimizedSrc = withTransform(src, VIDEO_TRANSFORM);
+  const posterSrc = buildPosterUrl(src);
 
   return (
-    <div className="relative flex flex-1 flex-col overflow-hidden">
-      {activeConversation ? (
-        <div
-          ref={messagesScrollRef}
-          className="flex flex-1 flex-col gap-1 overflow-y-auto overscroll-contain px-2 py-3 sm:px-3 sm:py-4"
-        >
-          <p className="mb-3 text-center text-[11px] font-medium uppercase tracking-wide text-muted">
-            Today
-          </p>
-          {activeConversation.messages.map((message) => (
-            <MessageBubble key={message.id} message={message} />
-          ))}
-        </div>
-      ) : (
-        <NoConversationPlaceholder />
-      )}
-    </div>
+    <video
+      src={optimizedSrc}
+      poster={posterSrc}
+      controls
+      playsInline
+      preload="metadata"
+      className="mb-1.5 max-h-52 max-w-full rounded-lg object-contain sm:max-h-64 sm:rounded-xl"
+    />
   );
 }
